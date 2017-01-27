@@ -33,9 +33,9 @@ function SierpinskiTriangle(e){
 function drawTriangle(ct, p1, p2, p3, depth, maxDepth){
 	if(depth == maxDepth) return;
 	
-	ct.beginPath();
+	ct.beginPath();  // mark the starting of the path
 	ct.moveTo(p1[0], p1[1]);  // index [0] is the x co-ordinate and [1] is the y co-ordinate
-	ct.lineTo(p2[0], p2[1]);
+	ct.lineTo(p2[0], p2[1]);  // .lineTo(x,y)
 	ct.lineTo(p3[0], p3[1]);
 	ct.lineTo(p1[0], p1[1]);
 	ct.stroke();
@@ -45,7 +45,7 @@ function drawTriangle(ct, p1, p2, p3, depth, maxDepth){
 	var q3 = [];
 
 	q1[0] = (p1[0] + p2[0])>>1;  // >>1 is equivalent to divide by 2 but is much faster and efficient
-	q1[1] = (p1[1] + p2[1])>>1;
+	q1[1] = (p1[1] + p2[1])>>1;  // here we are basically computing pair-wise mid points
 	q2[0] = (p2[0] + p3[0])>>1;
 	q2[1] = (p2[1] + p3[1])>>1;
 	q3[0] = (p3[0] + p1[0])>>1;
