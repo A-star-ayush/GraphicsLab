@@ -1,5 +1,7 @@
 var ct;
 
+var color = ["white", "red","#E87F21","#FBD949","black"];
+
 window.onload = function() {
 
 	var canvas = document.getElementById("canvas");
@@ -27,10 +29,10 @@ function SierpinskiTriangle(e){
 		p3[i] = parseInt(p3[i], 10);
 	}
 	
-	drawTriangle(ct, p1, p2, p3, 0, d);
+	drawTriangle(ct, p1, p2, p3, 0, d, 0);
 }
 
-function drawTriangle(ct, p1, p2, p3, depth, maxDepth){
+function drawTriangle(ct, p1, p2, p3, depth, maxDepth, id){
 	if(depth == maxDepth) return;
 	
 	ct.beginPath();  // mark the starting of the path
@@ -56,11 +58,12 @@ function drawTriangle(ct, p1, p2, p3, depth, maxDepth){
 	ct.lineTo(q2[0], q2[1]);
 	ct.lineTo(q3[0], q3[1]);
 	ct.lineTo(q1[0], q1[1]);
+	ct.fillStyle = color[id];
 	ct.fill();  // Note the style is fill and not stroke
 
-	drawTriangle(ct, p1, q1, q3, depth+1, maxDepth);
-	drawTriangle(ct, q1, p2, q2, depth+1, maxDepth);
-	drawTriangle(ct, q3, q2, p3, depth+1, maxDepth);
+	drawTriangle(ct, p1, q1, q3, depth+1, maxDepth, 1);
+	drawTriangle(ct, q1, p2, q2, depth+1, maxDepth, 2);
+	drawTriangle(ct, q3, q2, p3, depth+1, maxDepth, 3);
 
 }
 
