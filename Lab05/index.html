@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>RANDOM RECTANGLES</title>
+	<script type="text/javascript" src="main.js"> </script>
+	<style type="text/css">
+		html, body {
+			margin: 0px;
+		}
+		canvas {
+			display: block;
+			opacity: 1.0;
+		}
+	</style>
+</head>
+<body onload="start()">
+	<canvas id="canvas"></canvas>
+
+	<script id="vertexSource" type="notjs">
+		attribute vec2 a_position;
+		uniform vec2 u_resolution;
+
+		void main(){
+			vec2 zeroToOne = a_position/u_resolution;
+			vec2 zeroToTwo = zeroToOne * 2.0;
+			vec2 clipSpace = zeroToTwo - 1.0;
+			gl_Position = vec4(clipSpace*vec2(1,-1), 0, 1);
+		}
+	</script>
+	<script id="fragmentSource" type="notjs">
+
+	precision mediump float;
+	uniform vec4 color;
+
+	void main(){
+		gl_FragColor = color;
+	}
+	</script>
+
+</body>
+</html>
