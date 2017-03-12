@@ -4,6 +4,8 @@ window.onload = function(){
 		width = canvas.width = window.innerWidth,
 		height = canvas.height = window.innerHeight;
 
+	var ind;  // index for the array "vertices"
+
 	function drawWindow() {
 		ct.clearRect(0,0,width,height);
 		ct.beginPath();
@@ -14,26 +16,33 @@ window.onload = function(){
 		ct.lineWidth = 3;
 		ct.stroke();
 		ct.lineWidth = 1;
+		ind = 0;  // resetting the index to 0
 	}
 
 	drawWindow();
 
-	canvas.onmousedown = pointOne;
-	canvas.onmouseup = pointTwo;
-	document.onkeypress = clipLine;
+	canvas.onmousedown = storeVertex;
+	document.onkeypress = clipPolygon;
 
-	p = [-1, -1];
-	q = [-1, -1];
+	vertices = [];
 	
-	function pointOne(e){ p[0] = e.offsetX;  p[1] = e.offsetY; }
-	function pointTwo(e){ q[0] = e.offsetX;  q[1] = e.offsetY;
-						  ct.beginPath(); ct.moveTo(p[0], p[1]); ct.lineTo(q[0],q[1]); ct.stroke(); }
+	function storeVertex(e){
+		vertices[ind] = { x: e.offsetX, y: e.offsetY }; 
+		if(ind == 0) { drawWindow(); ct.beginPath(); ct.moveTo(vertices[0].x, vertices[0].y); }
+		else { ct.lineTo(vertices[ind].x, vertices[ind].y); ct.stroke(); }
+		++ind;
+	}
 
-
-	function clipLine(){
-		
+	function clipPolygon(){
 		drawWindow();
 
+		for(var i=0; i<(vertices.length - 1); ++i)
+			clipLine([vertices[i].x, vertices[i].y], [vertices[i+1].x, vertices[i+1].y]);
+	
+		vertices = []; // clearing array so that we don't remember anything from the previous run
+	}
+
+	function clipLine(p, q){
 		var worker1 = new Worker("intersection.js");
 		var worker2 = new Worker("intersection.js");
 		var worker3 = new Worker("intersection.js");
@@ -71,7 +80,8 @@ window.onload = function(){
 			flag = e.data[0];
 		}
 
-		setTimeout(performClipping, 100);  // giving some time for the workers to finish their work
+		setTimeout(performClipping, 400);  // giving some time for the workers to finish their work
+											// more than what was needed in Lab03
 
 		function performClipping(){ 
 			if(poi_1 == null && poi_2 == null) { if(!flag) return; poi_1=[p[0],p[1]]; poi_2=[q[0],q[1]]; }
@@ -86,8 +96,8 @@ window.onload = function(){
 				poi_2[0] = q[0]^((p[0]^q[0]) & mask);
 				poi_2[1] = q[1]^((p[1]^q[1]) & mask);
 			} 
+
 			ct.beginPath(); ct.moveTo(poi_1[0], poi_1[1]); ct.lineTo(poi_2[0],poi_2[1]); ct.stroke();
 		}	
-
 	}
 }
