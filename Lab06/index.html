@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Projections</title>
+	<script type="text/javascript" src="main.js"></script>
+	<style type="text/css">
+	html, body {
+		margin: 0px;
+	}
+	canvas {
+		display: block;
+	}
+	</style>
+</head>
+
+<body onload="start()">
+	<canvas id="canvas"></canvas>
+	<script id="vertexSource" type="notjs">
+	attribute vec4 a_position;
+	attribute vec4 a_color;
+	uniform mat4 u_matrix;
+
+	varying vec4 v_color;
+
+	void main(){
+		gl_Position = u_matrix*a_position;
+		v_color = a_color;
+	}
+													
+	</script>
+
+	<script id="fragmentSource" type="notjs">
+	precision mediump float;
+	varying vec4 v_color;
+	void main(){
+		gl_FragColor = v_color;
+	}
+	</script>
+</body>
+</html>
